@@ -1,7 +1,7 @@
 # cpython_internal_details
 学习笔记：记录 cpython 的内部实现细节，暂时只有中文版
 
-## 第二章
+## 第 2 章
 - [Python 中的整数对象](#python-------)
   * [参考资料](#----)
     + [Python 源码剖析](#python-----)
