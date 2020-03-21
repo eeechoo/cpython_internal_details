@@ -43,6 +43,9 @@ list_remove(PyListObject *self, PyObject *value)
 }
 
 
+/* ass 是 assign 的缩写,代表这个函数具有赋值功能 
+   等价于 a[ilow, ihigh] = v,注意v应该iterable
+*/
 static int
 list_ass_slice(PyListObject *a, Py_ssize_t ilow, Py_ssize_t ihigh, PyObject *v)
 {
@@ -132,3 +135,51 @@ TypeError: can only assign an iterable
 看看这个链接即可 https://www.the5fire.com/python-slice-assignment-analyse-souce-code.html
 
 
+## list get items
+```PYTHON
+a = [1,2,3,4,5]
+
+a[1]
+a[1:2]
+a[1.25]
+```
+对应于如下代码
+```C
+static PyObject *
+list_subscript(PyListObject* self, PyObject* item)
+{
+    if (PyIndex_Check(item)) {
+        ...
+        return list_item(self, i);
+    }
+    else if (PySlice_Check(item)) {
+       ...
+    }
+    else {
+        PyErr_Format(PyExc_TypeError,
+                     "list indices must be integers or slices, not %.200s",
+                     item->ob_type->tp_name);
+        return NULL;
+    }
+}
+
+
+```
+
+
+## list tp_as_sequence 和 tp_as_mapping
+第一反应 list 为什么会有 tp_as_mapping，但是仔细考虑考虑  
+list 也是 一种 映射关系的体现，而且写法上和dict的映射没有差别
+```PYTHON
+a = ["apple", "banana", "cake"]
+映射关系为 1 -> "apple"
+          2 -> "banana"
+          3 -> "cake"
+slice(1, 2) -> ["banana"]
+写法上 也是使用 subscript a[1],a[2],a[3],a[1:2],a[slice(1,2)]
+最终调用 tp_as_mapping 中 list_subscript 函数
+
+b = {'a': "apple", 'b': "banana", 'c': "cake"}
+dict 也是一种映射关系的体现，写法上也是 b['a'],b['b'],b['c'],
+最终调用 tp_as_mapping 中 dict_subscript 函数
+```
