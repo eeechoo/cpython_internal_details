@@ -17,3 +17,9 @@
   * [Q:hashable immutable](#q-hashable-immutable)
   * [后续更新与反馈](#-------)
   * [后记](#--)
+
+## 第 3 章：PyUnicodeObject
+1. PyUnicodeObject 长什么样子
+2. PyUnicodeObject 如何分配空间、初始化
+3. 字符串 intern 机制
+4. 0-127 字符 缓存机制
