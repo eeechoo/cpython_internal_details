@@ -12,7 +12,8 @@ ListObject 在内存中如下图所示：
 
 ## 插入元素 到 list
 ```C
-int PyList_Insert(PyObject *op, Py_ssize_t where, PyObject *newitem)
+int 
+PyList_Insert(PyObject *op, Py_ssize_t where, PyObject *newitem)
 ```
 
 
@@ -68,6 +69,8 @@ list_ass_slice(PyListObject *a, Py_ssize_t ilow, Py_ssize_t ihigh, PyObject *v)
 }  
 ```
 
+
+
 ## 现在考虑频繁的插入删除，在，会不会出现抖动现象
 考察的就是 ```static int
 list_resize(PyListObject *self, Py_ssize_t newsize)``` 这个函数
@@ -104,4 +107,28 @@ list_resize(PyListObject *self, Py_ssize_t newsize)
 - 假设 allocated=7， newsize=2，此时会计算出 new_allocated=5
 - 假设 allocated=5， newsize=1，此时会计算出 new_allocated=4
 - 假设 allocated=4， newsize=0，此时会计算出 new_allocated=0
+
+
+
+
+
+## 深入思考 切片赋值
+```
+>>> a = [1,2,3,4]
+>>> a[1:3] = 2
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: can only assign an iterable
+
+
+# 下面这种写法 违反常识，是一种非常糟糕的写法
+>>> a[1:1] = [7]
+>>> a
+[1, 7, 2, 3, 4]
+```
+虽然这是种糟糕的写法，但是为什么会这样呢？
+因为切片赋值调用的就是 ```list_ass_slice``` 函数
+
+看看这个链接即可 https://www.the5fire.com/python-slice-assignment-analyse-souce-code.html
+
 
