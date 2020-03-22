@@ -23,3 +23,10 @@
 2. PyUnicodeObject 如何分配空间、初始化
 3. 字符串 intern 机制
 4. 0-127 字符 缓存机制
+
+## 第 4 章：PyListObject
+1. PyListObject 长什么样子
+2. PyListObject 如何分配空间、初始化
+3. 字符串 intern 机制
+4. 0-127 字符 缓存机制
+
