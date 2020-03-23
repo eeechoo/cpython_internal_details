@@ -1,48 +1,28 @@
-
-
-
-
-
-
-
-
-
-1. 定义空间
-typedef struct _object {
-    _PyObject_HEAD_EXTRA
-    Py_ssize_t ob_refcnt;
-    struct _typeobject *ob_type;
-} PyObject;
-
+# include/cpython/dictobject.h
 typedef struct {
-    PyObject ob_base;
-    Py_ssize_t ob_size; /* Number of items in variable part */
-} PyVarObject;
+    PyObject_HEAD
 
-#define PyObject_VAR_HEAD      PyVarObject ob_base;
-typedef struct _typeobject {
-typedef struct _typeobject PyTypeObject;
+    /* Number of items in the dictionary */
+    Py_ssize_t ma_used;
 
+    /* Dictionary version: globally unique, value change each time
+       the dictionary is modified */
+    uint64_t ma_version_tag;
 
-2. 第一次填充
-PyTypeObject PyType_Type = {
+    PyDictKeysObject *ma_keys;
 
+    /* If ma_values is NULL, the table is "combined": keys and values
+       are stored in ma_keys.
 
-#define PyObject_HEAD_INIT(type)        \
-    { _PyObject_EXTRA_INIT              \
-    1, type },
-#define PyVarObject_HEAD_INIT(type, size)       \
-    { PyObject_HEAD_INIT(type) size },
-
-
-3. 第二次填充
-PyStatus
-_PyTypes_Init(void)
+       If ma_values is not NULL, the table is splitted:
+       keys are stored in ma_keys and values are stored in ma_values */
+    PyObject **ma_values;
+} PyDictObject;
 
 
-int
-PyType_Ready(PyTypeObject *type)
 
 
-#define _PyVarObject_CAST(op) ((PyVarObject*)(op))
-#define Py_TYPE(ob)             (_PyObject_CAST(ob)->ob_type)
+
+
+
+
