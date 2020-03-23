@@ -1,28 +1,14 @@
-# include/cpython/dictobject.h
-typedef struct {
-    PyObject_HEAD
+### 入门阅读
+- https://github.com/zpoint/CPython-Internals/blob/master/BasicObject/dict/dict_cn.md
+- https://www.hongweipeng.com/index.php/archives/1230/
+- 这位俄罗斯人做的ppt真不错  
+  https://www.slideshare.net/delimitry/python-dictionary-past-present-future
 
-    /* Number of items in the dictionary */
-    Py_ssize_t ma_used;
-
-    /* Dictionary version: globally unique, value change each time
-       the dictionary is modified */
-    uint64_t ma_version_tag;
-
-    PyDictKeysObject *ma_keys;
-
-    /* If ma_values is NULL, the table is "combined": keys and values
-       are stored in ma_keys.
-
-       If ma_values is not NULL, the table is splitted:
-       keys are stored in ma_keys and values are stored in ma_values */
-    PyObject **ma_values;
-} PyDictObject;
+- Raymond Hettinger(python core developer)（这个人很会讲笑话）
+ - https://www.youtube.com/watch?v=npw4s1QTmPg
+ - https://www.youtube.com/watch?v=p33CVV29OG8
+ - you can follow him on Twitter（https://twitter.com/raymondh）
 
 
 
-
-
-
-
-
+ 
