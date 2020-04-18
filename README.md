@@ -29,3 +29,6 @@
 2. PyObject_GC_New 来分配空间
 3. List 插入元素、删除元素 这种动态分配空间的能力是如何实现的
 
+## 第 5 章:PyDictObject
+
+
