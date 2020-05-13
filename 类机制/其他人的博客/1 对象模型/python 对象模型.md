@@ -47,9 +47,7 @@ PyTypeObject PyType_Type = {
     0,                                          /* tp_richcompare */
 }
 
-#define TPSLOT(NAME, SLOT, FUNCTION, WRAPPER, DOC) \
-    {NAME, offsetof(PyTypeObject, SLOT), (void *)(FUNCTION), WRAPPER, \
-     PyDoc_STR(DOC)}
+
 
 #define ETSLOT(NAME, SLOT, FUNCTION, WRAPPER, DOC) \
     {NAME, offsetof(PyHeapTypeObject, SLOT), (void *)(FUNCTION), WRAPPER, \
@@ -59,6 +57,26 @@ PyTypeObject PyType_Type = {
     ETSLOT(NAME, as_number.SLOT, FUNCTION, wrap_binaryfunc_l, \
            NAME "($self, value, /)\n--\n\nReturn self" DOC "value.")
 
+
+
+
+
+
+typedef PyObject *(*wrapperfunc)(PyObject *self, PyObject *args,
+                                 void *wrapped);
+struct wrapperbase {
+    const char *name;
+    int offset;
+    void *function;
+    wrapperfunc wrapper;
+    const char *doc;
+    int flags;
+    PyObject *name_strobj;
+};
+typedef struct wrapperbase slotdef;
+#define TPSLOT(NAME, SLOT, FUNCTION, WRAPPER, DOC) \
+    {NAME, offsetof(PyTypeObject, SLOT), (void *)(FUNCTION), WRAPPER, \
+     PyDoc_STR(DOC)}
 static slotdef slotdefs[] = {
     ...
     TPSLOT("__eq__", tp_richcompare, slot_tp_richcompare, richcmp_eq,
